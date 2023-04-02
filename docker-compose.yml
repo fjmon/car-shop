@@ -35,3 +35,4 @@ services:
       # Garanta que não haverá conflitos de porta com um mongodb que esteja
       # rodando localmente
       - 27017:27017
+      
