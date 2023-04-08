@@ -34,5 +34,15 @@ class ICarModel {
     return this.model
       .create({ ...car });
   }
+
+  public async getAll() {
+    return this.model.find();
+  }
+
+  public async getById(id: string): 
+  Promise<ICar | null> {
+    return this.model.findById(id);
+  }
 }
+
 export default ICarModel;

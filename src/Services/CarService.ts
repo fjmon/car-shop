@@ -1,5 +1,7 @@
-import ICar from '../Interfaces/ICar';
-import ICarModel from '../Models/CarModel';
+import ICar 
+  from '../Interfaces/ICar';
+import ICarModel 
+  from '../Models/CarModel';
 import Car from '../Domains/Car';
 
 export default class CarService {
@@ -13,8 +15,25 @@ export default class CarService {
   }
 
   public async create(car: ICar) {
-    const carModel = new ICarModel();
-    return this.newCar(await carModel
-      .create(car));
+    return this.newCar(
+      await new ICarModel()
+        .create(car),
+    );
+  }
+
+  public async getAll() {
+    return (await new ICarModel()
+      .getAll())
+      .map((car) => this
+        .newCar(car));
+  }
+
+  public async getById(
+    id: string,
+  ) {
+    return this.newCar(
+      await new ICarModel()
+        .getById(id),
+    );
   }
 }
