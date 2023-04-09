@@ -39,9 +39,22 @@ class ICarModel {
     return this.model.find();
   }
 
-  public async getById(id: string): 
+  public async getById(id: string):
   Promise<ICar | null> {
     return this.model.findById(id);
+  }
+
+  public async upCarId(
+    id: string, 
+    car: ICar,
+  ): 
+    Promise<ICar | null> {
+    return this.model
+      .findByIdAndUpdate(
+        id, 
+        car, 
+        { new: true },
+      );
   }
 }
 

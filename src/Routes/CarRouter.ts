@@ -25,4 +25,11 @@ router.get(
     .getById(),
 );
 
+router.put(
+  '/:id', 
+  (req, res, next) => new 
+  CarController(req, res, next)
+    .upCarId(),
+);
+
 export default router;

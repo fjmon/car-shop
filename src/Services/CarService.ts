@@ -36,4 +36,14 @@ export default class CarService {
         .getById(id),
     );
   }
+
+  public async upCarId(
+    id: string, 
+    car: ICar,
+  ) {
+    return this.newCar(
+      await new ICarModel()
+        .upCarId(id, car),
+    );
+  }
 }
