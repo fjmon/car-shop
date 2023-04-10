@@ -24,7 +24,9 @@ export default class Car {
     return this.doorsQty;
   }
 
-  public setDoorsQty(doorsQty: number): void {
+  public setDoorsQty(
+    doorsQty: number,
+  ): void {
     this.doorsQty = doorsQty;
   }
 
@@ -32,7 +34,9 @@ export default class Car {
     return this.seatsQty;
   }
 
-  public setSeatsQty(seatsQty: number): void {
+  public setSeatsQty(
+    seatsQty: number,
+  ): void {
     this.seatsQty = seatsQty;
   }
 }

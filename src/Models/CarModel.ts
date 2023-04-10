@@ -1,7 +1,8 @@
-import { Schema, model, Model, models } 
+import { Schema, model, Model, models }
   from 'mongoose';
 import ICar from '../Interfaces/ICar';
 
+export default
 class ICarModel {
   private schema: Schema;
   private model: Model<ICar>;
@@ -57,5 +58,3 @@ class ICarModel {
       );
   }
 }
-
-export default ICarModel;
