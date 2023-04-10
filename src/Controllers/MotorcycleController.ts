@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction }
   from 'express';
+import { isValidObjectId } from 'mongoose';
 import MotorcycleService 
   from '../Services/MotorcycleService';
+import IMotorcycle 
+  from '../Interfaces/IMotorcycle';
 
 export default 
 class MotorcycleController {
@@ -36,8 +39,15 @@ class MotorcycleController {
   }
 
   public async getById() {
-    if (!(await this.motorcycleService
-      .getById(this.req.params.id))) {
+    if (!isValidObjectId(
+      this.req.params.id,
+    )) {
+      return this.res.status(422)
+        .json({ 
+          message: 'Invalid mongo id' });
+    }
+    if (!await this.motorcycleService
+      .getById(this.req.params.id)) {
       return this.res.status(404)
         .json({ 
           message: 'Motorcycle not found',
@@ -46,5 +56,52 @@ class MotorcycleController {
     return this.res.status(200)
       .json(await this.motorcycleService
         .getById(this.req.params.id));
+  }
+  
+  public async upCarId() {
+    const {
+      id,
+      model,
+      year,
+      color,
+      status,
+      buyValue,
+      category,
+      engineCapacity,
+    } = this.req.body;
+
+    if (!isValidObjectId(
+      this.req.params.id,
+    )) {
+      return this.res.status(422)
+        .json({ 
+          message: 'Invalid mongo id' });
+    }
+    const motorcycle: IMotorcycle = {
+      id,
+      model,
+      year,
+      color,
+      status,
+      buyValue,
+      category,
+      engineCapacity,
+    };
+    if (!await this.motorcycleService
+      .upCarId(
+        this.req.params.id, 
+        motorcycle,
+      )) {
+      return this.res.status(404)
+        .json({ 
+          message: 'Motorcycle not found',
+        });
+    }
+    return this.res.status(200)
+      .json(await this.motorcycleService
+        .upCarId(
+          this.req.params.id, 
+          motorcycle,
+        ));
   }
 }

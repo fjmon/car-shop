@@ -37,4 +37,15 @@ class IMotorcycleService {
     if (!motorcycle) return null;
     return new Motorcycle(motorcycle);
   }
+
+  public async upCarId(
+    id: string, 
+    motorcycle: IMotorcycle,
+  ) {
+    const upMotorcycle = await new 
+    MotorcycleModel()
+      .upCarId(id, motorcycle);
+    if (!upMotorcycle) return null;
+    return new Motorcycle(upMotorcycle);
+  }
 }

@@ -1,6 +1,5 @@
 import { Schema, Model, models, model }
   from 'mongoose';
-import ICar from '../Interfaces/ICar';
 
 export default 
 abstract class AbstractODM<T> {
@@ -34,11 +33,11 @@ abstract class AbstractODM<T> {
 
   public async upCarId(
     id: string, 
-    car: ICar,
+    car: Partial<T>,
   ) {
     return this.model.findByIdAndUpdate(
       id, 
-      { car }, 
+      { ...car }, 
       { new: true },
     );
   }
