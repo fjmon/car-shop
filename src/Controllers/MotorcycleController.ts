@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction }
   from 'express';
-import { isValidObjectId } from 'mongoose';
 import MotorcycleService 
   from '../Services/MotorcycleService';
 import IMotorcycle 
@@ -26,39 +25,38 @@ class MotorcycleController {
     MotorcycleService();
   }
 
-  public async create() {
+  async create() {
     return this.res.status(201)
       .json(await this.motorcycleService
         .create(this.req.body));
   }
 
-  public async getAll() {
+  async getAll() {
     return this.res.status(200)
       .json(await this.motorcycleService
         .getAll());
   }
 
-  public async getById() {
-    if (!isValidObjectId(
-      this.req.params.id,
-    )) {
+  async getById() {
+    try {
+      if (!await this.motorcycleService
+        .getById(this.req.params.id)) {
+        return this.res.status(404)
+          .json({ 
+            message: 'Motorcycle not found',
+          });
+      }
+      return this.res.status(200)
+        .json(await this.motorcycleService
+          .getById(this.req.params.id));
+    } catch {
       return this.res.status(422)
         .json({ 
           message: 'Invalid mongo id' });
     }
-    if (!await this.motorcycleService
-      .getById(this.req.params.id)) {
-      return this.res.status(404)
-        .json({ 
-          message: 'Motorcycle not found',
-        });
-    }
-    return this.res.status(200)
-      .json(await this.motorcycleService
-        .getById(this.req.params.id));
   }
   
-  public async upCarId() {
+  async upCarId() {
     const {
       id,
       model,
@@ -69,14 +67,6 @@ class MotorcycleController {
       category,
       engineCapacity,
     } = this.req.body;
-
-    if (!isValidObjectId(
-      this.req.params.id,
-    )) {
-      return this.res.status(422)
-        .json({ 
-          message: 'Invalid mongo id' });
-    }
     const motorcycle: IMotorcycle = {
       id,
       model,
@@ -87,21 +77,27 @@ class MotorcycleController {
       category,
       engineCapacity,
     };
-    if (!await this.motorcycleService
-      .upCarId(
-        this.req.params.id, 
-        motorcycle,
-      )) {
-      return this.res.status(404)
-        .json({ 
-          message: 'Motorcycle not found',
-        });
-    }
-    return this.res.status(200)
-      .json(await this.motorcycleService
+    try {
+      if (!await this.motorcycleService
         .upCarId(
           this.req.params.id, 
           motorcycle,
-        ));
+        )) {
+        return this.res.status(404)
+          .json({ 
+            message: 'Motorcycle not found',
+          });
+      }
+      return this.res.status(200)
+        .json(await this.motorcycleService
+          .upCarId(
+            this.req.params.id, 
+            motorcycle,
+          ));
+    } catch {
+      return this.res.status(422)
+        .json({ 
+          message: 'Invalid mongo id' });
+    }
   }
 }

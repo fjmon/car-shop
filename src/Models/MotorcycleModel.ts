@@ -7,7 +7,7 @@ export default
 class IMotorcycleModel 
   extends AbstractODM<IMotorcycle> {
   constructor() {
-    super(new Schema<IMotorcycle>({
+    const schema = new Schema<IMotorcycle>({
       model: { 
         type: String, required: true },
       year: { 
@@ -27,7 +27,7 @@ class IMotorcycleModel
       },
       engineCapacity: { 
         type: Number, required: true },
-
-    }), 'Motorcycle');
+    }); 
+    super(schema, 'Motorcycle');
   }
 }

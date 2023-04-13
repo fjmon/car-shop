@@ -7,15 +7,14 @@ import Motorcycle
 
 export default 
 class IMotorcycleService {
-  private MotorcycleModel: 
-  MotorcycleModel;
+  MotorcycleModel: MotorcycleModel;
 
   constructor() {
     this.MotorcycleModel = new 
     MotorcycleModel();
   }
 
-  public async create(
+  async create(
     motorcycle: IMotorcycle,
   ) {
     if (!motorcycle) return null;
@@ -25,20 +24,20 @@ class IMotorcycleService {
     );
   }
 
-  public async getAll() {
+  async getAll() {
     return (await this.MotorcycleModel
       .getAll()).map((motorcycle) => new
     Motorcycle(motorcycle));
   }
 
-  public async getById(id: string) {
+  async getById(id: string) {
     const motorcycle = await new 
     MotorcycleModel().getById(id);
     if (!motorcycle) return null;
     return new Motorcycle(motorcycle);
   }
 
-  public async upCarId(
+  async upCarId(
     id: string, 
     motorcycle: IMotorcycle,
   ) {
