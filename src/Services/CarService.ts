@@ -5,7 +5,7 @@ import ICarModel
 import Car from '../Domains/Car';
 
 export default class CarService {
-  private newCar(
+  newCar(
     car: ICar | null,
   ): Car | null {
     if (car) {

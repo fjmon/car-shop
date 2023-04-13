@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction }
   from 'express';
-import { isValidObjectId } 
-  from 'mongoose';
 import ICar from '../Interfaces/ICar';
 import CarService 
   from '../Services/CarService';
@@ -56,24 +54,25 @@ export default class CarController {
   }
   
   async getById() {
-    const { id } = this.req.params;
-    if (!isValidObjectId(id)) {
+    try {
+      const car = await this.carService
+        .getById(this.req.params.id);
+      if (!car) {
+        return this.res.status(404)
+          .json({ 
+            message: 'Car not found', 
+          });
+      }
+      return this.res.status(200)
+        .json(car);
+    } catch (error) {
       return this.res.status(422)
         .json({ 
           message: 'Invalid mongo id',
         });
     }
-    const car = await this.carService
-      .getById(id);
-    if (!car) {
-      return this.res.status(404)
-        .json({ 
-          message: 'Car not found', 
-        });
-    }
-    return this.res.status(200)
-      .json(car);
   }
+  
   async upCarId() {
     const { 
       model, 
@@ -85,12 +84,6 @@ export default class CarController {
       seatsQty, 
     } = this.req.body;
     const { id } = this.req.params;
-    if (!isValidObjectId(id)) {
-      return this.res.status(422)
-        .json({ 
-          message: 'Invalid mongo id', 
-        });
-    }
     const car: ICar = {
       id,
       model,
@@ -101,13 +94,20 @@ export default class CarController {
       doorsQty,
       seatsQty,
     };
-    if (!(await this.carService
-      .upCarId(id, car))) {
-      return this.res.status(404)
-        .json({ message: 'Car not found' });
+    try {
+      if (!(await this.carService
+        .upCarId(id, car))) {
+        return this.res.status(404)
+          .json({ message: 'Car not found' });
+      }
+      return this.res.status(200)
+        .json(await this.carService
+          .upCarId(id, car));
+    } catch (error) {
+      this.res.status(422)
+        .json({ 
+          message: 'Invalid mongo id', 
+        });
     }
-    return this.res.status(200)
-      .json(await this.carService
-        .upCarId(id, car));
   }
 }
